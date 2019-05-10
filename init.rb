@@ -3,7 +3,7 @@ require 'redmine'
 require_dependency 'custom_fields_helper_patch'
 require_dependency 'issues_helper_patch'
 
-Redmine::Plugin.register :custom_fields_i18n do
+Redmine::Plugin.register :redmine_custom_fields_i18n do
   name 'Custom Fields I18n plugin'
   author 'General Failure'
   description 'Internalization for Redmine custom fields'
