@@ -16,7 +16,7 @@ module IssuesHelperPatch
 
         # To Internationalization
         l_name = l(value.custom_field.name)
-        unless l_name.index('translation missing:') == 0 && l_name.index(value.custom_field.name) == l_name.length - value.custom_field.name.length
+        unless l_name.index('translation missing:') == 0 || l_name.index(value.custom_field.name) == l_name.length - value.custom_field.name.length
           value.custom_field.name = l_name
         end
 
