@@ -7,7 +7,7 @@ module CustomFieldsHelperPatch
 
     # To Internationalization
     l_name = l(custom_value.custom_field.name)
-    unless l_name.index('translation missing:') == 0 || l_name.index(custom_value.custom_field.name) == l_name.length - custom_value.custom_field.name.length
+    unless l_name.index('translation missing:') == 0
       custom_value.custom_field.name = l_name
     end
 
