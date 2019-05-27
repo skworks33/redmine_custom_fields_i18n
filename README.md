@@ -1,6 +1,8 @@
 # redmine_custom_fields_i18n
 Plugin for Redmine custom fields internalization
 
+work on 4.0.3 OK.
+
 # What is it
 Redmine is flexible system that allows many things, including custom fields.
 But they can not be localized - they have name and description in one language.

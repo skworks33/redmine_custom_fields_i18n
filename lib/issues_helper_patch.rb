@@ -16,10 +16,7 @@ module IssuesHelperPatch
         m = (i < half ? :left : :right)
 
         # To Internationalization
-        l_name = l(value.custom_field.name)
-        unless l_name.index('translation missing:') == 0
-          value.custom_field.name = l_name
-        end
+        value.custom_field.name = get_locale(value.custom_field.name)
 
         rows.send m, custom_field_name_tag(value.custom_field), attr_value, :class => css
       end
@@ -40,10 +37,7 @@ module IssuesHelperPatch
       end
 
       # To Internationalization
-      l_name = l(value.custom_field.name)
-      unless l_name.index('translation missing:') == 0
-        value.custom_field.name = l_name
-      end
+      value.custom_field.name = get_locale(value.custom_field.name)
 
       content =
           content_tag('hr') +
@@ -93,13 +87,8 @@ module IssuesHelperPatch
     when 'cf'
       custom_field = detail.custom_field
       if custom_field
-        label = custom_field.name
-
         # To Internationalization
-        l_name = l(label)
-        unless l_name.index('translation missing:') == 0
-          label = l_name
-        end
+        label = get_locale(custom_field.name)
 
         if custom_field.format.class.change_no_details
           no_details = true
@@ -178,6 +167,39 @@ module IssuesHelperPatch
       end
     else
       l(:text_journal_deleted, :label => label, :old => old_value).html_safe
+    end
+  end
+
+  def email_issue_attributes(issue, user, html)
+    items = []
+    %w(author status priority assigned_to category fixed_version start_date due_date).each do |attribute|
+      if issue.disabled_core_fields.grep(/^#{attribute}(_id)?$/).empty?
+        if html
+          items << content_tag('strong', "#{l("field_#{attribute}")}: ") + (issue.send attribute)
+        else
+          items << "#{l("field_#{attribute}")}: #{issue.send attribute}"
+        end
+      end
+    end
+    issue.visible_custom_field_values(user).each do |value|
+      # To Internationalization
+      value.custom_field.name = get_locale(value.custom_field.name)
+      if html
+        items << content_tag('strong', "#{value.custom_field.name}: ") + show_value(value, false)
+      else
+        items << "#{value.custom_field.name}: #{show_value(value, false)}"
+      end
+    end
+    items
+  end
+
+  private
+
+  def get_locale(field_name)
+    unless l(field_name).index('translation missing:') == 0
+      return l(field_name)
+    else
+      return field_name
     end
   end
 
